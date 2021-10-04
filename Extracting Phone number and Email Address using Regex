@@ -1,0 +1,97 @@
+import re
+
+#  regex for Phone number
+
+phoneNumRegex = re.compile(r'''(
+                    (\d{3} | \(\d{3}\))?               #Format can be braket or without braket 
+                    (\s|-|\.)?                         #Space or - or .
+                    (\d{3})                            #3 character
+                    (\s|-|\.)?                         #space or - or .
+                    (\d{4})                            #4 character
+                    (\s*(ext|x|ext.)\s*(\d{2,5}))?     #any number of space then "ext or x or ext(anything) then 2 to 5 character
+                    )''', re.VERBOSE)
+
+# Searching for phone number within one line
+'''
+#multile comment
+phoneNum = phoneNumRegex.search('My number is  (415) 555-4242        extn      2358867 ')
+print('Phone number found: ' + phoneNum.group())
+
+'''
+
+# regex for Email Address
+
+emailRegex = re.compile(r'''(
+                    ([a-zA-Z0-9._%+-]+)                #username             
+                    @                                  #symbol
+                    [a-zA-Z0-9._+]+                    #domain
+                    (\.[a-zA-Z]{2,4})                  #dot-something
+                        )''', re.VERBOSE)
+
+# Searching for Email address within one line
+'''
+emailAddress = emailRegex.search('shamimice03@gmail.com')
+print('Email address is: ' + emailAddress.group())
+
+'''
+
+# Way to open file from a location " open(path_to_file, mode)"  -modes are 'r', 'w', 'a'
+# Example - file = open("C:\\Users\\a1054589\Desktop\\testcase.txt",'r+')
+file = open("testcase.txt", 'r+')
+lines = file.readlines()
+Phonebook = []
+
+#  Searching for phone number line by line,
+# "findall" function will return a list with multiple list (groups) inside it
+#  so, every list from (groups) need to be checked.
+#  a single (group) from groups contains data up to its 8th index if extension available
+#  we will join (1,3,5)th index and if any extension available then we will join 8th index also
+
+for line in lines:
+    groups = phoneNumRegex.findall(line)
+    # print(groups)    # Print it for getting whole picture
+    phonenum = ''
+
+    for group in groups:
+        phonenum = "-".join([group[1], group[3], group[5]])
+        if group[8] != '':
+            phonenum += ' extension ' + (group[8])
+        Phonebook.append(phonenum)
+
+print('\n'.join(Phonebook))  # Printing each line with new lines
+
+# There can be multiple of list in (Groups),
+# So, we have access each element and 0th index is the index where we get the full email address
+
+Emailbook = []
+for line in lines:
+    groups = emailRegex.findall(line)
+    # print(groups)  #Print it for getting the whole picture
+
+    for group in groups:
+        Emailbook.append(group[0])
+
+print('\n'.join(Emailbook))
+
+
+# Exporting Phone number and Email on text file
+'''
+The r means reading file; r+ means reading and writing the file.
+The w means writing file; w+ means reading and writing the file.
+The a means writing file, append mode; a+ means reading and writing file, append mode.
+
+'''
+
+
+result = open('Phone and Email list.txt', 'w+')
+
+number = "Phone Number List - \n\n"
+number += '\n'.join(Phonebook)  # Direct list can not be write, That why we converted it into string using join
+result.write(number)
+
+email = "\n\n\nEmail Address List - \n\n"
+email += '\n'.join(Emailbook)  # Direct list can not be write, That why we converted it into string using join
+result.write(email)
+
+result.close()
+
