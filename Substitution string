@@ -1,0 +1,20 @@
+# https://www.hackerrank.com/challenges/re-sub-regex-substitution/problem
+
+# ?:  is for non capturing group
+# ?=  is for positive look ahead
+# ?!  is for negative look ahead
+# ?<= is for positive look behind
+# ?<! is for negative look behind
+
+import re
+
+n = input()
+s=""
+for i in range(int(n)):
+    s = s + input() + '\n'
+    s = re.sub('(?<=\s)\&\&\s','and ',  s)
+    s = re.sub('(?<=\s)\|\|\s', 'or ', s)
+
+
+print(s)
+
