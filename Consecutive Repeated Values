@@ -8,7 +8,7 @@ digits = '115555544444'
 # search - will return a tuple
 
 # (\type)\1{repeated count} - will return a specific value which is matched
-#  (\type)\2{repeated count} - will return full repeated value and match value
+# (\type)\2{repeated count} - will return full repeated value and match value
 
 test = re.findall(r"((\d)\2{3,})", digits)  # will return a list with repeated values and matched values
 print(test)
